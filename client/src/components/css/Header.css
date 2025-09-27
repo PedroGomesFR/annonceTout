@@ -1,0 +1,25 @@
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+}
+
+nav ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+nav ul li {
+  display: inline;
+  margin: 0 1rem;
+}
+
+nav ul li a {
+  text-decoration: none;
+  color: #007bff;
+}
+
+nav ul li a:hover {
+  text-decoration: underline;
+}
