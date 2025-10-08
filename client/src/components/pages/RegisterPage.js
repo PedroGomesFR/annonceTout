@@ -3,8 +3,11 @@ import '../../components/css/RegisterPage.css';
 import Input from "../common/Input";
 import { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
+import { useNavigate} from 'react-router-dom';
 
 function RegisterPage({ setUser }) {
+
+    const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
         prenom: '',
@@ -227,7 +230,31 @@ function RegisterPage({ setUser }) {
 
         try {
             console.log('Données du formulaire:', formData);
-            // Ici vous pourrez ajouter l'appel API plus tard
+            const response = await fetch('http://localhost:5050/api/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+
+            const data = await response.json();
+            console.log('Réponse du serveur:', data);
+
+            if (response.ok) {
+                console.log('Inscription réussie, utilisateur:', data.user);
+
+                setUser(data.user);
+                localStorage.setItem('user', JSON.stringify(data.user));
+                navigate('/profile');
+            } else {
+                // Gérer les erreurs spécifiques du serveur
+                if (data.error && data.error.includes('email')) {
+                    setErrorMessages(prev => ({ ...prev, email: 'Email déjà utilisé.' }));
+                } else {
+                    alert('Erreur lors de l\'inscription. Veuillez réessayer.');
+                }
+            }
         } catch (error) {
             console.error('Erreur:', error);
         }

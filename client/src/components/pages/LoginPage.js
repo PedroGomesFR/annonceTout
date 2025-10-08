@@ -3,9 +3,11 @@ import '../../components/css/LoginPage.css';
 import Input from "../common/Input";
 import { Link } from "react-router-dom";
 import { useState } from 'react';
+import { useNavigate} from 'react-router-dom';
 
 function LoginPage({ setUser }) {
 
+        const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
           email: '',
@@ -58,7 +60,7 @@ function LoginPage({ setUser }) {
       return;
     }
     try {
-      const response = await fetch("/record/login", {
+      const response = await fetch("http://localhost:5050/api/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -74,6 +76,7 @@ function LoginPage({ setUser }) {
         console.log("Login successful:", successData);
         localStorage.setItem("user", JSON.stringify(successData.user));
         setUser(successData.user);
+        navigate('/profile');
       }
     } catch (error) {
       console.error("Error during login:", error);

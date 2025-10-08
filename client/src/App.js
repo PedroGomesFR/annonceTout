@@ -7,8 +7,20 @@ import Footer from './components/assets/Footer';
 import Header from './components/assets/Header';
 import LoginPage from './components/pages/LoginPage';
 import RegisterPage from './components/pages/RegisterPage';
+import ProfilePage from './components/pages/ProfilePage';
+import AjoutAnnonce from './components/pages/AjoutAnnonce';
+import { useState } from 'react';
 
 function App() {
+
+  const [user, setUser] = useState(() => {
+    try {
+      return JSON.parse(localStorage.getItem("user"));
+    } catch {
+      return null;
+    }
+  });
+
   return (
     <div className="app-container">
       {/* Purple Center Glow */}
@@ -16,20 +28,22 @@ function App() {
       {/* Your Content/Components */}
       <div className="app-content">
         <Router>
-          <Header />
+          <Header user={user} />
           <Routes>
             <Route path="/" element={<HomePage />} />
-            <Route path="/home" element={<HomePage />} />
-            <Route path="/about" element={<AboutPage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
+              <Route path="/home" element={<HomePage />} />
+                <Route path="/about" element={<AboutPage />} />
+                  <Route path="/login" element={<LoginPage setUser={setUser} />} />
+                <Route path="/register" element={<RegisterPage setUser={setUser} user={user} />} />
+              <Route path="/profile" element={<ProfilePage user={user} setUser={setUser} />} />
+              <Route path="/ajoutAnnonce" element={<AjoutAnnonce />} />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
-          <Footer />
         </Router>
       </div>
     </div>
   );
+
 }
 
 export default App;
